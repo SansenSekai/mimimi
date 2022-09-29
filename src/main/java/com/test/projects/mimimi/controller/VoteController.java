@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/vote")
+@RequestMapping(value = "/api/vote")
 public class VoteController {
     private final VoteService voteService;
 
@@ -20,7 +20,7 @@ public class VoteController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/pairs")
-    public ResponseEntity<? extends Object> getVotePairs(@RequestParam(required = true) String subjectCategory){
+    public ResponseEntity<?> getVotePairs(@RequestParam(required = true) String subjectCategory){
         try {
            return ResponseEntity.ok(voteService.getVoteSubjects(subjectCategory));
         } catch (ObjectNotFoundException e) {

@@ -1,0 +1,2 @@
+INSERT INTO public.users (id, created, updated, password, username)
+    VALUES ('081e3968-786a-4fb9-b5f3-930222ff029b', '2022-09-29 22:33:16.000000', '2022-09-29 22:33:16.000000', '$2a$04$EGgpzdS/3afy8q6cyTPUsO35vwVfyfqmkKhcMIrM5khoaXBAcylwm', 'user');

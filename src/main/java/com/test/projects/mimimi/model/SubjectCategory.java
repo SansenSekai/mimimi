@@ -1,4 +1,4 @@
-package com.test.projects.mimimi.domain;
+package com.test.projects.mimimi.model;
 
 import lombok.*;
 
@@ -8,9 +8,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VoteSubject {
+public class SubjectCategory {
     private UUID id;
     private String name;
-    private String imageUrl;
-    private UUID subjectCategory;
 }
