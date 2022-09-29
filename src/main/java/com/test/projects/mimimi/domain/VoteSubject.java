@@ -1,4 +1,4 @@
-package com.test.projects.mimimi.domains;
+package com.test.projects.mimimi.domain;
 
 import lombok.*;
 

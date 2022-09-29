@@ -1,8 +1,8 @@
-package com.test.projects.mimimi.services.subjects;
+package com.test.projects.mimimi.service.subjects;
 
-import com.test.projects.mimimi.dtos.VotePairDTO;
-import com.test.projects.mimimi.dtos.VoteSubjectDTO;
-import com.test.projects.mimimi.exceptions.ObjectNotFoundException;
+import com.test.projects.mimimi.dto.VotePairDTO;
+import com.test.projects.mimimi.dto.VoteSubjectDTO;
+import com.test.projects.mimimi.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;

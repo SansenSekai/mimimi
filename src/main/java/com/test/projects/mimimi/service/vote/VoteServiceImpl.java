@@ -1,8 +1,8 @@
-package com.test.projects.mimimi.services.vote;
+package com.test.projects.mimimi.service.vote;
 
-import com.test.projects.mimimi.dtos.VotePairDTO;
-import com.test.projects.mimimi.exceptions.ObjectNotFoundException;
-import com.test.projects.mimimi.services.subjects.SubjectStorage;
+import com.test.projects.mimimi.dto.VotePairDTO;
+import com.test.projects.mimimi.exception.ObjectNotFoundException;
+import com.test.projects.mimimi.service.subjects.SubjectStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

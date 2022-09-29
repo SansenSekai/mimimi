@@ -1,4 +1,4 @@
-package com.test.projects.mimimi.dtos;
+package com.test.projects.mimimi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

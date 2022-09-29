@@ -1,7 +1,7 @@
-package com.test.projects.mimimi.controllers;
+package com.test.projects.mimimi.controller;
 
-import com.test.projects.mimimi.exceptions.ObjectNotFoundException;
-import com.test.projects.mimimi.services.vote.VoteService;
+import com.test.projects.mimimi.exception.ObjectNotFoundException;
+import com.test.projects.mimimi.service.vote.VoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

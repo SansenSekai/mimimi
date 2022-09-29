@@ -1,12 +1,10 @@
-package com.test.projects.mimimi.services.subjects;
+package com.test.projects.mimimi.service.subjects;
 
-import com.test.projects.mimimi.domains.VoteSubject;
-import com.test.projects.mimimi.dtos.VotePairDTO;
-import com.test.projects.mimimi.exceptions.ObjectNotFoundException;
+import com.test.projects.mimimi.dto.VotePairDTO;
+import com.test.projects.mimimi.exception.ObjectNotFoundException;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**

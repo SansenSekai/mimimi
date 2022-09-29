@@ -1,4 +1,4 @@
-package com.test.projects.mimimi.exceptions;
+package com.test.projects.mimimi.exception;
 
 public class ObjectNotFoundException extends Exception {
     public ObjectNotFoundException() {
