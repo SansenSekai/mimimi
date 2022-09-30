@@ -4,6 +4,7 @@ import com.test.projects.mimimi.dto.auth.AuthRequest;
 import com.test.projects.mimimi.dto.auth.AuthResponse;
 import com.test.projects.mimimi.model.auth.User;
 import com.test.projects.mimimi.security.jwt.JwtTokenUtil;
+import com.test.projects.mimimi.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +17,20 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping(value = Path.AUTH)
 public class AuthController {
-    private AuthenticationManager authManager;
-    private JwtTokenUtil jwtUtil;
+    private final AuthService authService;
+    private final AuthenticationManager authManager;
+    private final JwtTokenUtil jwtUtil;
 
     @Autowired
-    public AuthController(AuthenticationManager authManager, JwtTokenUtil jwtUtil) {
+    public AuthController(AuthService authService, AuthenticationManager authManager, JwtTokenUtil jwtUtil) {
+        this.authService = authService;
         this.authManager = authManager;
         this.jwtUtil = jwtUtil;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/api/auth/login")
+    @RequestMapping(method = RequestMethod.POST, value = "/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthRequest request) {
         try {
             Authentication authentication = authManager.authenticate(
@@ -42,6 +46,16 @@ public class AuthController {
 
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/register")
+    public ResponseEntity<?> register(@RequestBody @Valid AuthRequest request) {
+        try {
+            authService.register(request);
+            return ResponseEntity.ok().build();
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }

@@ -1,14 +1,13 @@
 package com.test.projects.mimimi.controller;
 
+import com.test.projects.mimimi.model.VoteSubject;
 import com.test.projects.mimimi.security.jwt.JwtTokenUtil;
 import com.test.projects.mimimi.service.subjects.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -17,13 +16,11 @@ public class SubjectController {
     private final SubjectService subjectService;
     private final JwtTokenUtil tokenUtil;
 
+    @Autowired
     public SubjectController(SubjectService subjectService, JwtTokenUtil tokenUtil) {
         this.subjectService = subjectService;
         this.tokenUtil = tokenUtil;
     }
-
-    @Autowired
-
 
     @RequestMapping(method = RequestMethod.GET, value = "/categories")
     public ResponseEntity<?> getVoteSubjectCategories(){
@@ -39,6 +36,16 @@ public class SubjectController {
         try {
             UUID id = tokenUtil.getIdFromToken(token);
             return ResponseEntity.ok(subjectService.getAvailableSubjectCategories(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/top")
+    public ResponseEntity<?> getVoteTop(@RequestParam UUID category, @RequestParam(defaultValue = "10") Integer max){
+        try {
+            List<VoteSubject> topSubjects = subjectService.getTopSubjects(category, max);
+            return ResponseEntity.ok(topSubjects);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -2,8 +2,8 @@ package com.test.projects.mimimi.service.vote;
 
 import com.test.projects.mimimi.dto.vote.VotePairDTO;
 import com.test.projects.mimimi.dto.vote.VoteSubjectDTO;
+import com.test.projects.mimimi.exception.CheaterException;
 import com.test.projects.mimimi.exception.ObjectNotFoundException;
-import com.test.projects.mimimi.model.SubjectCategory;
 import com.test.projects.mimimi.model.UserCategory;
 import com.test.projects.mimimi.repository.SubjectCategoryRepository;
 import com.test.projects.mimimi.repository.SubjectRepository;
@@ -49,14 +49,15 @@ public class VoteServiceImpl implements VoteService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void vote(List<VotePairDTO> pairs, UUID userId) throws ObjectNotFoundException, RequestRejectedException {
+    public void vote(List<VotePairDTO> pairs, UUID userId) throws ObjectNotFoundException, RequestRejectedException, CheaterException {
         UUID categoryId = pairs.get(0).getLeftSubject().getSubjectCategoryId();
 
-        userCategoryRepository.getByUser_IdAndSubjectCategory_Id(userId, (categoryId));
+        userCategoryRepository.getByUser_IdAndSubjectCategory_Id(userId, categoryId)
+                .ifPresent(i -> {throw new CheaterException("You can not vote twice");});
 
         ArrayList<VotePairDTO> votePairs = subjectStorage.getVotePairs(categoryId);
 
-        if(!comparePairs(pairs, votePairs)) {
+        if (!comparePairs(pairs, votePairs)) {
             throw new RequestRejectedException("Wrong request data");
         }
 
@@ -64,15 +65,15 @@ public class VoteServiceImpl implements VoteService {
 
         pairs.forEach(item -> {
             VoteSubjectDTO subject;
-            if(item.getLeftSubject().getVoted()) {
+            if (item.getLeftSubject().getVoted()) {
                 subject = item.getLeftSubject();
-            } else if(item.getRightSubject().getVoted()) {
+            } else if (item.getRightSubject().getVoted()) {
                 subject = item.getRightSubject();
             } else {
                 throw new RequestRejectedException("Wrong request data");
             }
 
-            if(votedSubjects.containsKey(subject.getId())) {
+            if (votedSubjects.containsKey(subject.getId())) {
                 Integer likes = votedSubjects.get(subject.getId());
                 votedSubjects.put(subject.getId(), likes + 1);
             } else {
@@ -90,7 +91,7 @@ public class VoteServiceImpl implements VoteService {
     }
 
     private Boolean comparePairs(List<VotePairDTO> pairs1, List<VotePairDTO> pairs2) {
-        if(pairs1.size() != pairs2.size()) {
+        if (pairs1.size() != pairs2.size()) {
             return false;
         }
 

@@ -1,6 +1,7 @@
 package com.test.projects.mimimi.controller;
 
 import com.test.projects.mimimi.dto.vote.VotePairDTO;
+import com.test.projects.mimimi.exception.CheaterException;
 import com.test.projects.mimimi.exception.ObjectNotFoundException;
 import com.test.projects.mimimi.security.jwt.JwtTokenUtil;
 import com.test.projects.mimimi.service.vote.VoteService;
@@ -25,21 +26,21 @@ public class VoteController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/pairs")
-    public ResponseEntity<?> getVotePairs(@RequestParam(required = true) UUID subjectCategory){
+    public ResponseEntity<?> getVotePairs(@RequestParam(required = true) UUID category){
         try {
-           return ResponseEntity.ok(voteService.getVoteSubjects(subjectCategory));
+           return ResponseEntity.ok(voteService.getVoteSubjects(category));
         } catch (ObjectNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/check")
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> checkVote(@RequestHeader("Authorization") String token, @RequestBody List<VotePairDTO> pairs){
         try {
             UUID userId = tokenUtil.getIdFromToken(token);
             voteService.vote(pairs, userId);
             return ResponseEntity.ok().build();
-        } catch (ObjectNotFoundException | RequestRejectedException e) {
+        } catch (ObjectNotFoundException | RequestRejectedException | CheaterException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

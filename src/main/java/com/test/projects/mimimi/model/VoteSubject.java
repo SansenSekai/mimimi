@@ -18,7 +18,7 @@ public class VoteSubject extends AppEntity {
     @Column(nullable = false)
     private Integer likes = 0;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "subject_category_id", nullable = false)
     private SubjectCategory subjectCategory;
 }

@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SubjectCategoryRepository extends JpaRepository<SubjectCategory, UUID> {
-    List<SubjectCategory> getAllByIdNotIn(Collection<UUID> id);
+    List<SubjectCategory> findAllByIdNotIn(Collection<UUID> id);
 }
