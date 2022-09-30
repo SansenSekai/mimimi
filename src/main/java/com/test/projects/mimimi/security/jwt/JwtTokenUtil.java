@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -15,11 +16,13 @@ public class JwtTokenUtil {
 
     @Value("${app.jwt.secret}")
     private String SECRET_KEY;
+    @Value("${app.name}")
+    private String APP_NAME;
 
     public String generateAccessToken(User user) {
         return Jwts.builder()
                 .setSubject(String.format("%s,%s", user.getId(), user.getUsername()))
-                .setIssuer("Mimimimetr")
+                .setIssuer(APP_NAME )
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
@@ -30,16 +33,8 @@ public class JwtTokenUtil {
         try {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException ex) {
-            log.error("JWT expired", ex.getMessage());
-        } catch (IllegalArgumentException ex) {
-            log.error("Token is null, empty or only whitespace", ex.getMessage());
-        } catch (MalformedJwtException ex) {
-            log.error("JWT is invalid", ex);
-        } catch (UnsupportedJwtException ex) {
-            log.error("JWT is not supported", ex);
-        } catch (SignatureException ex) {
-            log.error("Signature validation failed");
+        } catch (Exception ex) {
+            log.error("JWT error: {}", ex.getMessage());
         }
 
         return false;
@@ -48,6 +43,10 @@ public class JwtTokenUtil {
     public String getSubject(String token) {
         return parseClaims(token).getSubject();
     }
+    public UUID getIdFromToken(String token) {
+        String id = parseClaims(token.replace("Bearer ", "")).getSubject().split(",")[0];
+        return UUID.fromString(id);
+    };
 
     private Claims parseClaims(String token) {
         return Jwts.parser()

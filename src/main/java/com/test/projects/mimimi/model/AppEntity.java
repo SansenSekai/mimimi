@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,4 +29,13 @@ public class AppEntity {
     @Column(name = "updated")
     private Date updated;
 
+    @PrePersist
+    protected void onCreate() {
+        updated = created = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = new Date();
+    }
 }
