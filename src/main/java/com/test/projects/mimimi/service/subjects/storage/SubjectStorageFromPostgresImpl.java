@@ -45,6 +45,7 @@ public class SubjectStorageFromPostgresImpl implements SubjectStorage {
 
     @Scheduled(fixedDelay = 1000 * 60)
     private void updateVotePairs() {
+        Map<UUID, ArrayList<VotePairDTO>> newMap = new HashMap<>();
         List<SubjectCategory> categories = categoryRepository.findAll();
 
         categories.parallelStream().forEach(item -> {
@@ -60,7 +61,8 @@ public class SubjectStorageFromPostgresImpl implements SubjectStorage {
                 }
             }
 
-            votePairs.put(item.getId(), pairs);
+            newMap.put(item.getId(), pairs);
         });
+        this.votePairs = newMap;
     }
 }
